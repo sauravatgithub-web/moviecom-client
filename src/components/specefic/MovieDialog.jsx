@@ -9,9 +9,12 @@ import { server } from '../constants/config';
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import toast from 'react-hot-toast';
 import { useDeleteMovieMutation, useUploadMovieMutation } from '../../redux/api/api';
+import { getSocket } from '../../socket';
+import { renameFile } from '../../utils/nameCorrector.js'
 
-const Movie = ({ chatId, chatName, movies }) => {
+const MovieDialog = ({ chatId, chatName, members, movies }) => {
     const dispatch = useDispatch();
+    const socket = getSocket();
 
     const movieRef = useRef(null);
     const { isMovie } = useSelector((state) => state.misc);
@@ -37,8 +40,8 @@ const Movie = ({ chatId, chatName, movies }) => {
     }
 
     const playMovieHandler = (movie) => {
-        dispatch(setIsMovie(false));
-        
+        socket.emit('watch-movie-request', {chatName, members, movie});
+        dispatch(setIsMovie(false)); 
     }
 
     const movieDeleteHandler = async(movie) => {
@@ -91,7 +94,7 @@ const Movie = ({ chatId, chatName, movies }) => {
 const MovieItem = ({movie, onClick, onDelete}) => {
     return (
         <Stack direction = "row" spacing = {"0.8rem"} borderBottom={`1px solid ${borderBlueColor}`}>
-            <Typography variant = "h6" marginTop={"0.2rem"} onClick = {onClick}>{movie.name}</Typography>
+            <Typography variant = "h6" marginTop={"0.2rem"} onClick = {onClick}>{renameFile(movie.name)}</Typography>
             <Box sx = {{ flexGrow: 1 }} />
             <IconButton sx = {{ color: deleteIconColor }} onClick = {onDelete}><DeleteIcon/></IconButton>
         </Stack>
@@ -108,4 +111,4 @@ const idGenerator = () => {
     return num;
 }
 
-export default Movie;
+export default MovieDialog;

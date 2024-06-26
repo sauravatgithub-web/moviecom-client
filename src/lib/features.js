@@ -28,4 +28,17 @@ const getOrSaveFromStorage = ({ key, value, get }) => {
     else localStorage.setItem(key, JSON.stringify(value));
 }
 
-export { fileFormat, transformImage, getLast7Days, getOrSaveFromStorage };
+const buttonStyle = {
+    height: "4rem",
+    width: "4rem",
+    borderRadius: 40,
+    backgroundColor: "blue"
+}
+
+const iconStyle = {
+    height: "100%",
+    width: "100%",
+    color: "white",
+}
+
+export { fileFormat, transformImage, getLast7Days, getOrSaveFromStorage, buttonStyle, iconStyle };

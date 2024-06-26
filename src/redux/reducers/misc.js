@@ -16,7 +16,7 @@ const initialState = {
         id: "",
         groupChat: false,
     },
-    displayHandleCall: false,
+    displayDialog: false,
     calling: true,
     isMovie: false,
     showMovie: false,
@@ -62,8 +62,8 @@ const miscSlice = createSlice({
         setSelectedDeleteChat: (state, action) => {
             state.selectedDeleteChat = action.payload;
         },
-        setDisplayHandleCall: (state, action) => {
-            state.displayHandleCall = action.payload;
+        setDisplayDialog: (state, action) => {
+            state.displayDialog = action.payload;
         },
         setCalling: (state, action) => {
             state.calling = action.payload;
@@ -72,7 +72,7 @@ const miscSlice = createSlice({
             state.isMovie = action.payload;
         },
         setShowMovie: (state, action) => {
-            state.action = action.payload;
+            state.showMovie = action.payload;
         }
     }
 });
@@ -91,7 +91,7 @@ export const {
     setShowVideo,
     setUploadingLoader,
     setSelectedDeleteChat,
-    setDisplayHandleCall,
+    setDisplayDialog,
     setCalling,
     setIsMovie,
     setShowMovie

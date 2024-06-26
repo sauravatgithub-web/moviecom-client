@@ -18,7 +18,7 @@ import { TypingLoader } from '../components/layout/Loaders.jsx';
 import { useNavigate } from 'react-router-dom';
 import peer from '../service/peer.js'
 
-const MovieDialog = lazy(() => import('../components/specefic/Movie.jsx'));
+const MovieDialog = lazy(() => import('../components/specefic/MovieDialog.jsx'));
 
 const Chat = ({ chatId, user }) => {
     const bottomRef = useRef(null);
@@ -200,7 +200,7 @@ const Chat = ({ chatId, user }) => {
             </Box>
             {isMovie && (
                 <Suspense fallback = {<Backdrop open/>}>
-                    <MovieDialog chatId = {chatId} chatName = {chatName} movies = {movies}/>
+                    <MovieDialog chatId = {chatId} chatName = {chatName} members = {members} movies = {movies}/>
                 </Suspense>
             )}
             <Stack 
