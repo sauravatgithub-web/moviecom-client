@@ -46,7 +46,7 @@ const Profile = ({ user, dispatch, profileAnchor }) => {
                         </Stack>
                     </Stack>
                     <Stack spacing = {"1rem"} style = {{ padding: 10 }}>
-                        <ProfileCard heading={"About"} text={user?.bio || "Hi, I am using Chat App"}/>
+                        <ProfileCard heading={"About"} text={user?.bio || "Hi, I am using moviecom"}/>
                         <ProfileCard text={moment(user?.createdAt).fromNow()} icon={<CalendarIcon/>}/>
                     </Stack>
                 </Stack>

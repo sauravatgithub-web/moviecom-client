@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    isOtp: false,
     isNewGroup: false,
     isAddMember: false,
     isNotification: false,
@@ -26,6 +27,9 @@ const miscSlice = createSlice({
     name: "misc",
     initialState,
     reducers: {
+        setIsOtp: (state, action) => {
+            state.isOtp = action.payload;
+        },
         setIsNewGroup: (state, action) => {
             state.isNewGroup = action.payload;
         },
@@ -79,6 +83,7 @@ const miscSlice = createSlice({
 
 export default miscSlice;
 export const { 
+    setIsOtp,
     setIsNewGroup, 
     setIsAddMember,
     setIsNotification,

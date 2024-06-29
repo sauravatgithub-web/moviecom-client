@@ -20,7 +20,6 @@ const Login = () => {
 
     const toggleLogin = () => setIsLogin((prev) => !prev);
     const name = useInputValidation("");
-    const bio = useInputValidation("");
     const email = useInputValidation("", emailValidator);
     const username = useInputValidation("", usernameValidator);
     const password = useStrongPassword();
@@ -66,7 +65,6 @@ const Login = () => {
         const formData = new FormData();
         formData.append("avatar", avatar.file);
         formData.append("name", name.value);
-        formData.append("bio", bio.value);
         formData.append("username", username.value);
         formData.append("password", password.value);
         formData.append("email", email.value);
@@ -92,6 +90,23 @@ const Login = () => {
 
     const handleForgetPassword = async(e) => {
         e.preventDefault();
+        const toastId = toast.loading("Sending OTP  .... ");
+        const config = {
+            withCredentials: true,
+            headers: {
+                "Content-type": "application/json",
+            }
+        };
+
+        try {
+            setIsLoading(true);
+            const { data } = await axios.post(`${server}/api/v1/user/send`, {username: username.value}, config);
+            toast(data.success, { id: toastId });
+        }
+        catch(error) {
+            toast.error(error?.response?.data?.message || "Something went wrong", { id: toastId });
+        }
+        finally { setIsLoading(false) }
     }
 
     return (
@@ -131,7 +146,15 @@ const Login = () => {
                                 <Box sx = {{ display: "flex", justifyContent: "right", paddingBottom: "3vh" }}>
                                     <Button onClick = {handleForgetPassword} style={{ color: theme.palette.text.primary }} sx = {{ textTransform: "none" }}>Forget Password ?</Button>
                                 </Box>
-                                <Box sx = {{ display: "flex", justifyContent: "center" }}>
+                                <Box sx = {{ 
+                                    display: "flex", 
+                                    justifyContent: "center", 
+                                    flexDirection: "row", 
+                                    '@media (max-width: 400px)': {
+                                        flexDirection: "column", 
+                                        alignItems: "center",
+                                    }, 
+                                }}>
                                     <span>Don't have an account ? </span>
                                     <Button variant = "text" onClick = {toggleLogin} disabled = {isLoading} sx = {{ textTransform: "none", textDecoration: "underline", padding: "0 3px" }}>Sign up instead</Button>
                                 </Box>
@@ -142,41 +165,50 @@ const Login = () => {
                             <Typography variant = "h5">Sign Up</Typography>
                             <form style = {{
                                 width: "100%",
-                                marginTop : "1rem"
+                                marginTop: "1rem",
                             }} onSubmit = {handleSignUp}>
-
-                                <Stack position = {"relative"} width = {"8rem"} margin = {"auto"}>
-                                    <Avatar sx = {{width: "8rem", height: "8rem", objectFit: "contain"}} src = {avatar.preview}/>
-                                    <IconButton 
-                                        sx = {{
-                                            position: "absolute",
-                                            bottom: 0,
-                                            right: 0,
-                                            color: "white",
-                                            bgcolor: "rgba(0, 0, 0, 0.5)",
-                                            "&:hover" : {
-                                                bgcolor: "rgba(0, 0, 0, 0.7)",
-                                            },
-                                        }}
-                                        component = "label"
-                                    >
-                                        <>
-                                            <CameraAltIcon/>
-                                            <VisuallyHiddenInput type = "file" onChange = {avatar.changeHandler}/>
-                                        </>
-                                    </IconButton>
-                                </Stack>
-                                {avatar.error && (
-                                    <Typography color = "error" variant = "caption">{avatar.error}</Typography>
-                                )}
-                                
-                                <TextField required fullWidth label = "Name" margin = "normal" variant = "outlined" autoComplete = "true" value = {name.value} onChange={name.changeHandler} />
-                                <TextField required fullWidth label = "Bio" margin = "normal" variant = "outlined" autoComplete = "true" value = {bio.value} onChange={bio.changeHandler} />
-                                <TextField required fullWidth label = "Email" margin = "normal" variant = "outlined" autoComplete = "true" value = {email.value} onChange={email.changeHandler} />
+                                <Box spacing = {"0.5rem"} sx = {{ 
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    '@media (max-height: 720px)': {
+                                        flexDirection: "row",
+                                    },
+                                    justifyContent: "center",
+                                    alignItems: "center"
+                                }}>
+                                    <Stack position = {"relative"} width = {"8rem"} margin = {"auto"}>
+                                        <Avatar sx = {{width: "8rem", height: "8rem", objectFit: "contain"}} src = {avatar.preview}/>
+                                        <IconButton 
+                                            sx = {{
+                                                position: "absolute",
+                                                bottom: 0,
+                                                right: 0,
+                                                color: "white",
+                                                bgcolor: "rgba(0, 0, 0, 0.5)",
+                                                "&:hover" : {
+                                                    bgcolor: "rgba(0, 0, 0, 0.7)",
+                                                },
+                                            }}
+                                            component = "label"
+                                        >
+                                            <>
+                                                <CameraAltIcon/>
+                                                <VisuallyHiddenInput type = "file" onChange = {avatar.changeHandler}/>
+                                            </>
+                                        </IconButton>
+                                    </Stack>
+                                    {avatar.error && (
+                                        <Typography color = "error" variant = "caption">{avatar.error}</Typography>
+                                    )}
+                                    <Stack sx = {{ marginLeft: "1rem" }}>
+                                        <TextField required fullWidth label = "Name" margin = "normal" variant = "outlined" autoComplete = "true" value = {name.value} onChange={name.changeHandler} />
+                                        <TextField required fullWidth label = "Username" margin = "normal" variant = "outlined" autoComplete = "true" value = {username.value} onChange = {username.changeHandler}/>
+                                    </Stack>
+                                </Box>
                                 {email.error && (
                                     <Typography color = "error" variant = "caption">{email.error}</Typography>
                                 )}
-                                <TextField required fullWidth label = "Username" margin = "normal" variant = "outlined" autoComplete = "true" value = {username.value} onChange = {username.changeHandler}/>
+                                <TextField required fullWidth label = "Email" margin = "normal" variant = "outlined" autoComplete = "true" value = {email.value} onChange={email.changeHandler} />
                                 {username.error && (
                                     <Typography color = "error" variant = "caption">{username.error}</Typography>
                                 )}
