@@ -47,7 +47,7 @@ const ChatItem = ({
                 style={isHovered ? { ...baseStyle, ...hoverStyle } : baseStyle}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-            >
+            >   
                 <AvatarCard avatar={avatar} />
                 <Stack>
                     <Typography variant = "h6">{name}</Typography>

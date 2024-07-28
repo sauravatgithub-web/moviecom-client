@@ -68,6 +68,7 @@ const Chat = ({ chatId, user }) => {
         const avatarId = (members[0] === user._id) ? members[1] : members[0];
         avatar = avatars[avatarId];
     }
+    else avatar = avatars?.group;
 
     const messageOnChange = (e) => {
         setMessage(e.target.value);

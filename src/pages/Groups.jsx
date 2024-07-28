@@ -195,7 +195,7 @@ const Groups = () => {
                     display: { xs: "none", sm: "block" },
                 }}
                 sm = {3}
-                bgcolor = '#e8702f'
+                bgcolor = '#1e12ba'
             >
                 <GroupsList myGroups = {myGroups?.data?.groups} chatId={chatId} />
             </Grid>

@@ -28,6 +28,7 @@ const Header = () => {
     const openSearch = () => dispatch(setIsSearch(true));
     const openNewGroup = () => dispatch(setIsNewGroup(true));
     const navigateToGroup = () => navigate("/groups");
+    const navigateHandler = () => navigate("/");
 
     const openNotifications = () => {
         dispatch(setIsNotification(true));
@@ -51,7 +52,14 @@ const Header = () => {
                 <AppBar position = 'static' sx = {{bgcolor : lightBlue}}>
                     <Toolbar>
                         <img src = {icon} alt = "image" height = "30rem" width = "30rem" style = {{ marginRight: 15 }}/>
-                        <Typography variant = "h5" sx = {{ display : {xs : "none", sm : "block"}}}>moviecom</Typography>
+                        <Typography 
+                            variant = "h5"
+                            sx = {{ 
+                                display : {xs : "none", sm : "block"},
+                                cursor : "pointer"
+                            }} 
+                            onClick = {navigateHandler}
+                        >moviecom</Typography>
                         <Box sx = {{ display : {xs : "block", sm : "none"}}}>
                             <IconButton color = "inherit" onClick = {handleMobile}>
                                 <MenuIcon/>

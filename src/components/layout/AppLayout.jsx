@@ -79,7 +79,9 @@ const AppLayout = () => (WrappedComponent) => {
             setOnlineUsers(data);
         }, [dispatch]);
 
-        const sendAlert = useCallback(() => console.log("You are added to a new group."))
+        const sendAlert = useCallback((data) => {
+            toast.success(data); 
+        })
 
         const eventHandlers = { 
             [ALERT]: sendAlert,
@@ -192,7 +194,15 @@ const AppLayout = () => (WrappedComponent) => {
                     }}
                     onClick = {openProfile}
                 />
-                <Profile user = {user} dispatch = {dispatch} profileAnchor = {profileAnchor}/>
+                
+                <div style = {{
+                    display: "none",
+                    '@media (maxWidth: 600px)': {
+                        display: "none"
+                    }, 
+                }}>
+                    <Profile user = {user} dispatch = {dispatch} profileAnchor = {profileAnchor}/>
+                </div>
 
                 {(isVideo || showMovie) && 
                     <div style = {{

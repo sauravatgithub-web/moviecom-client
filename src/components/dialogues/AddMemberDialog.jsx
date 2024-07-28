@@ -9,7 +9,7 @@ import { setIsAddMember } from '../../redux/reducers/misc'
 const AddMemberDialog = ({chatId}) => {
     const dispatch = useDispatch();
     const [addMember, isLoadingAddMember] = useAsyncMutation(useAddMemberMutation);
-    const {isLoading, data, isError, error} = useAvailaibleFriendsQuery(chatId);
+    const {isLoading, data} = useAvailaibleFriendsQuery(chatId);
 
     const members = data?.friends;
     const [selectedMembers, setSelectedMembers] = useState([]);
