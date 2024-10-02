@@ -172,13 +172,23 @@ const api = createApi({
 
         deleteMovie:builder.mutation({
             query:({chatId, movie}) => ({
-                url: "/chat/deleteMovie",
+                url: "chat/deleteMovie",
                 method: "DELETE",
                 credentials: "include",
                 body: {chatId, movie},
             }),
             invalidatesTags: ["Chat"],
-        })
+        }),
+
+        updateAbout:builder.mutation({
+            query:({ userId, about }) => ({
+                url: `user/updateUserProfile`,
+                method: "PUT",
+                credentials: "include",
+                body: { userId, about },
+            }),
+            invalidatesTags: ["User"],
+        }),
     }),
 })
 
@@ -201,5 +211,6 @@ export const {
     useDeleteChatMutation,
     useLeaveGroupMutation,
     useUploadMovieMutation,
-    useDeleteMovieMutation
+    useDeleteMovieMutation,
+    useUpdateAboutMutation
 } = api;

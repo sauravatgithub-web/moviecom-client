@@ -10,6 +10,7 @@ import { LayoutLoader } from '../components/layout/Loaders.jsx'
 import { useChatDetailsQuery, useDeleteChatMutation, useMyGroupsQuery, useRemoveMemberMutation, useRenameGroupMutation } from '../redux/api/api.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIsAddMember } from '../redux/reducers/misc.js'
+import { groupListColor } from '../components/constants/color.js'
 
 const Groups = () => {
     const chatId = useSearchParams()[0].get("group");
@@ -191,11 +192,9 @@ const Groups = () => {
     return myGroups.isLoading?<LayoutLoader/> : (
         <Grid container height = {"100vh"}>
             <Grid item
-                sx = {{
-                    display: { xs: "none", sm: "block" },
-                }}
+                sx = {{ display: { xs: "none", sm: "block" } }}
                 sm = {3}
-                bgcolor = '#1e12ba'
+                bgcolor = {groupListColor}
             >
                 <GroupsList myGroups = {myGroups?.data?.groups} chatId={chatId} />
             </Grid>
@@ -268,7 +267,10 @@ const Groups = () => {
                 display : {
                     xs: "block",
                     sm: "none"
-                }
+                },
+                "& .MuiPaper-root": {  
+                    bgcolor: groupListColor,  
+                },
             }}
             open = {isMobileMenu} onClose = {handleMobileClose}>
                 <GroupsList w = {"50vw"} myGroups = {myGroups?.data?.groups} chatId={chatId}/>
@@ -285,7 +287,7 @@ const GroupsList = ({ w = "100%", myGroups = [], chatId }) => {
                     return <GroupsListItem group = {group} chatId = {chatId} key = {group._id} />
                 })
             ) : (
-                <Typography textAlign = {"center"} padding = "1rem">
+                <Typography textAlign = {"center"} padding = "2rem">
                     No Groups
                 </Typography>
             )}
@@ -301,7 +303,7 @@ const GroupsListItem = memo(({ group, chatId }) => {
                 if(chatId === _id) e.preventDefault();
             }}
         >
-            <Stack direction={"row"} spacing = {"0.5rem"} alignItems = {"center"}>
+            <Stack direction = {"row"} spacing = {"0.7rem"} alignItems = {"center"} padding = {"0.5rem"}>
                 <AvatarCard avatar = {avatar}/>
                 <Typography>{name}</Typography>
             </Stack>

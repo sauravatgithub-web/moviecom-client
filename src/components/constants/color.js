@@ -22,6 +22,8 @@ export const endCallColor = "#f50057";
 export const deleteIconColor = "#f14e4e";
 export const borderBlueColor = "#3838ef";
 
+export const groupListColor = "#284db3";
+
 export const buttonBackgroundColor = "#383c61";
 
 export const theme = createTheme({

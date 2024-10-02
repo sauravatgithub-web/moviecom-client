@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useMediaQuery } from 'react-responsive';
 import Header from './Header';
 import Title from '../shared/Title';
 import { Button, Drawer, Grid, Skeleton, Stack, Typography } from '@mui/material';
@@ -26,6 +27,7 @@ const AppLayout = () => (WrappedComponent) => {
         const dispatch = useDispatch();
         const navigate = useNavigate();
         const socket = getSocket();
+        const isNotMobile = useMediaQuery({ minWidth : 601 });
 
         const chatId = params.chatId;
         const profileAnchor = useRef(null);
@@ -184,23 +186,9 @@ const AppLayout = () => (WrappedComponent) => {
 
                 <DeleteChatMenu dispatch = {dispatch} deleteMenuAnchor={deleteMenuAnchor}/>
 
-                <img src = {user.avatar.url} 
-                    alt = "image" 
-                    height = "40rem" 
-                    width = "40rem" 
-                    style = {{ marginRight: 15, borderRadius: 20, zIndex: 2,
-                        position: "fixed", left: 0, bottom: 0, margin: 10, cursor: "pointer",
-                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                    }}
-                    onClick = {openProfile}
-                />
+                {isNotMobile && <ProfileDialog src = {user.avatar.url} openProfile = {openProfile}/>}
                 
-                <div style = {{
-                    display: "none",
-                    '@media (maxWidth: 600px)': {
-                        display: "none"
-                    }, 
-                }}>
+                <div>
                     <Profile user = {user} dispatch = {dispatch} profileAnchor = {profileAnchor}/>
                 </div>
 
@@ -251,6 +239,7 @@ const AppLayout = () => (WrappedComponent) => {
                             newMessagesAlert={newMessagesAlert}
                             onlineUsers={onlineUsers}
                         />
+                        {!isNotMobile && <ProfileDialog src = {user.avatar.url} openProfile = {openProfile} />}
                     </Drawer>
                 )}
 
@@ -286,6 +275,21 @@ const DialogBox = ({ messageToDisplay, acceptClick, declineClick }) => {
                 <Button variant = "outlined" onClick = {declineClick}>Decline</Button>
             </Stack>
         </Stack>
+    )
+}
+
+const ProfileDialog = ({ src, openProfile }) => {
+    return (
+        <img src = {src} 
+            alt = "image" 
+            height = "40rem" 
+            width = "40rem" 
+            style = {{ marginRight: 15, borderRadius: 20, zIndex: 2,
+                position: "fixed", left: 0, bottom: 0, margin: 10, cursor: "pointer",
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)'
+            }}
+            onClick = {openProfile}
+        />
     )
 }
 

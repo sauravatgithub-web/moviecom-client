@@ -203,15 +203,15 @@ const Login = () => {
                                     <Stack sx = {{ marginLeft: "1rem" }}>
                                         <TextField required fullWidth label = "Name" margin = "normal" variant = "outlined" autoComplete = "true" value = {name.value} onChange={name.changeHandler} />
                                         <TextField required fullWidth label = "Username" margin = "normal" variant = "outlined" autoComplete = "true" value = {username.value} onChange = {username.changeHandler}/>
+                                        {username.error && (
+                                            <Typography color = "error" variant = "caption">{username.error}</Typography>
+                                        )}
                                     </Stack>
                                 </Box>
                                 {email.error && (
                                     <Typography color = "error" variant = "caption">{email.error}</Typography>
                                 )}
                                 <TextField required fullWidth label = "Email" margin = "normal" variant = "outlined" autoComplete = "true" value = {email.value} onChange={email.changeHandler} />
-                                {username.error && (
-                                    <Typography color = "error" variant = "caption">{username.error}</Typography>
-                                )}
 
                                 <TextField required fullWidth label = "Password" type = "password" margin = "normal" variant = "outlined" autoComplete = "true" value = {password.value} onChange = {password.changeHandler}/>
                                 {password.error && (

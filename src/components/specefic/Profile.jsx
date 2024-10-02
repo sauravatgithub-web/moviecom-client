@@ -1,14 +1,37 @@
-import React from 'react'
-import { Avatar, Menu, Stack, Typography } from '@mui/material'
-import {Face as FaceIcon, AlternateEmail as UserNameIcon, CalendarMonth as CalendarIcon} from '@mui/icons-material'
+import React, { useState, useEffect } from 'react'
+import { Avatar, IconButton, Popover, Stack, TextField, Typography } from '@mui/material'
+import {Done as DoneIcon, Edit as EditIcon, Face as FaceIcon, AlternateEmail as UserNameIcon, CalendarMonth as CalendarIcon} from '@mui/icons-material'
 import moment from 'moment';
 import { transformImage } from '../../lib/features';
 import { useSelector } from 'react-redux';
 import { setIsProfile } from '../../redux/reducers/misc';
 import { profileColor } from '../constants/color';
+import { useAsyncMutation } from '../../hooks/hooks';
+import { useUpdateAboutMutation } from '../../redux/api/api';
 
 const Profile = ({ user, dispatch, profileAnchor }) => {
     const { isProfile } = useSelector((state) => state.misc);
+
+    const [isEdit, setIsEdit] = useState(false);
+    const [about, setAbout] = useState("");
+    const [aboutUpdateValue, setAboutUpdateValue] = useState("");
+    const [changeAbout, isLoadingChangeAbout] = useAsyncMutation(useUpdateAboutMutation);
+
+    useEffect(() => {
+        setAbout(user?.bio);
+        setAboutUpdateValue(user?.bio);
+
+        return () => {
+            setAbout("");
+            setAboutUpdateValue("");
+            setIsEdit(false);
+        }
+    },[user])
+
+    const updateAbout = () => {
+        setIsEdit(false);
+        changeAbout("Updating group name...", { userId : user._id, about: aboutUpdateValue })
+    }
 
     const closeHandler = () => {
         dispatch(setIsProfile(false));
@@ -16,7 +39,7 @@ const Profile = ({ user, dispatch, profileAnchor }) => {
     }
 
     return (
-        <Menu open = {isProfile} onClose = {closeHandler} anchorEl = {profileAnchor ? profileAnchor.current : null}
+        <Popover open = {isProfile} onClose = {closeHandler} anchorEl = {profileAnchor ? profileAnchor.current : null}
             anchorOrigin={{
                 vertical: "top",
                 horizontal: "right",
@@ -46,12 +69,24 @@ const Profile = ({ user, dispatch, profileAnchor }) => {
                         </Stack>
                     </Stack>
                     <Stack spacing = {"1rem"} style = {{ padding: 10 }}>
-                        <ProfileCard heading={"About"} text={user?.bio || "Hi, I am using moviecom"}/>
+                        <Stack direction = {"row"}>
+                            {isEdit ? (
+                            <>
+                                <TextField variant = "standard" value = {aboutUpdateValue} onChange={(e) => setAboutUpdateValue(e.target.value)}/>
+                                <IconButton onClick={updateAbout} disabled={isLoadingChangeAbout}><DoneIcon/></IconButton>
+                            </>
+                            ) : (
+                                <>  
+                                    <ProfileCard heading={"About"} text = {about}/>
+                                    <IconButton onClick = {() => {setIsEdit(true)}} disabled={isLoadingChangeAbout}><EditIcon/></IconButton>
+                                </>
+                            )}
+                        </Stack>
                         <ProfileCard text={moment(user?.createdAt).fromNow()} icon={<CalendarIcon/>}/>
                     </Stack>
                 </Stack>
             </div>
-        </Menu>
+        </Popover>
     )
 }
 
