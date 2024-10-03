@@ -1,4 +1,4 @@
-import { ListItemText, Menu, MenuItem, MenuList, Tooltip } from '@mui/material'
+import { Divider, ListItemText, Menu, MenuItem, MenuList, Tooltip } from '@mui/material'
 import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsFileMenu, setUploadingLoader } from '../../redux/reducers/misc';
@@ -47,7 +47,15 @@ const FileMenu = ({ anchorE1, chatId }) => {
     }
 
     return (
-        <Menu anchorEl = {anchorE1} open = {isFileMenu} onClose = {closeFileMenu}>
+        <Menu anchorEl = {anchorE1} open = {isFileMenu} onClose = {closeFileMenu}
+            sx = {{
+                borderRadius: '12px', 
+                overflow: 'hidden',
+                '& .MuiPaper-root': {
+                    borderRadius: '12px', 
+                },
+            }}
+        >
             <div style = {{ width: "10rem" }}>
                 <MenuList>
                     <MenuItem onClick = {selectImage}>
@@ -64,6 +72,7 @@ const FileMenu = ({ anchorE1, chatId }) => {
                             ref = {imageRef}
                         />
                     </MenuItem>
+                    <Divider/>
                     <MenuItem onClick = {selectAudio}>
                         <Tooltip title = "Audio">
                             <AudioFileIcon/>
@@ -78,6 +87,7 @@ const FileMenu = ({ anchorE1, chatId }) => {
                             ref = {audioRef}
                         />
                     </MenuItem>
+                    <Divider/>
                     <MenuItem onClick = {selectVideo}>
                         <Tooltip title = "Video">
                             <VideoFileIcon/>
@@ -92,6 +102,7 @@ const FileMenu = ({ anchorE1, chatId }) => {
                             ref = {videoRef}
                         />
                     </MenuItem>
+                    <Divider/>
                     <MenuItem onClick = {selectFile}>
                         <Tooltip title = "file">
                             <UploadFileIcon/>

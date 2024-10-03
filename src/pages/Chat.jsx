@@ -12,17 +12,20 @@ import { useChatDetailsQuery, useGetMessagesQuery } from '../redux/api/api.js';
 import { useErrors, useSocketEvents } from '../hooks/hooks.jsx';
 import { useInfiniteScrollTop } from '6pp';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCalling, setIsFileMenu, setIsMovie, setIsVideo, setShowVideo } from '../redux/reducers/misc.js';
+import { setCalling, setIsFileMenu, setIsMovie, setIsChatProfile, setIsVideo, setShowVideo } from '../redux/reducers/misc.js';
 import { removeNewMessagesAlert } from '../redux/reducers/chat.js';
 import { TypingLoader } from '../components/layout/Loaders.jsx';
 import { useNavigate } from 'react-router-dom';
 import peer from '../service/peer.js'
+import ChatProfile from '../components/specefic/ChatProfile.jsx';
 
 const MovieDialog = lazy(() => import('../components/specefic/MovieDialog.jsx'));
 
 const Chat = ({ chatId, user }) => {
     const bottomRef = useRef(null);
     const containerRef = useRef(null);
+    const imageRef = useRef(null);
+    const chatProfileAnchor = useRef(null);
     const socket = getSocket();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -55,6 +58,7 @@ const Chat = ({ chatId, user }) => {
     const avatars = chatDetails?.data?.chat?.avatar;
     const nAmE = chatDetails?.data?.chat?.name;
     const movies = chatDetails?.data?.chat?.movies;
+    const groupChat = chatDetails?.data?.chat?.groupChat;
 
     let chatName = "";
     if(members?.length === 2) {
@@ -63,12 +67,18 @@ const Chat = ({ chatId, user }) => {
     }
     else chatName = nAmE;
 
-    let avatar;
+    let avatar, username, createdAt, bio;
     if(members?.length === 2) {
-        const avatarId = (members[0] === user._id) ? members[1] : members[0];
+        const avatarId = (members[0]._id === user._id) ? members[1]._id : members[0]._id;
+        bio = (members[0]._id === user._id) ? members[1].bio : members[0].bio;
+        username = (members[0]._id === user._id) ? members[1].username : members[0].username;
+        createdAt = (members[0]._id === user._id) ? members[1].createdAt : members[0].createdAt;
         avatar = avatars[avatarId];
+
     }
     else avatar = avatars?.group;
+
+    const chatPerson = { name : chatName, avatar, bio, username, createdAt, groupChat }
 
     const messageOnChange = (e) => {
         setMessage(e.target.value);
@@ -161,10 +171,13 @@ const Chat = ({ chatId, user }) => {
 
     const allMessages = [...oldMessages, ...messages];
 
-    const openMovieList = (e) => dispatch(setIsMovie(true));
+    const openMovieList = (e) => {
+        e.stopPropagation();
+        dispatch(setIsMovie(true));
+    }
 
     const callHandler = async(e) => {
-        e.preventDefault();
+        e.stopPropagation();
         dispatch(setCalling(true));
         dispatch(setIsVideo(true));
         dispatch(setShowVideo(true));
@@ -184,12 +197,18 @@ const Chat = ({ chatId, user }) => {
         }
     }, [socket, callRejectedHandler]);
 
+    const showChatProfile = (e) => {
+        e.preventDefault();
+        chatProfileAnchor.current = imageRef.current;
+        dispatch(setIsChatProfile(true));
+    }
+
     return chatDetails.isLoading ? <Skeleton/> :  (
         <Fragment>
-            <Box sx = {{flexGrow : 1}} height = {"8%"}>
+            <Box sx = {{flexGrow : 1}} height = {"8%"} onClick = {showChatProfile}>
                 <AppBar position = 'static' sx = {{bgcolor : chatListColor}}>
                     <Toolbar direction = "row">
-                        <img src = {avatar} alt = "image" height = "30rem" width = "30rem" style = {{ marginRight: 15, borderRadius: 40, border: "1px solid white" }}/>
+                        <img src = {avatar} alt = "image" height = "30rem" width = "30rem" style = {{ marginRight: 15, borderRadius: 40, border: "1px solid white" }} ref = {imageRef}/>
                         <Typography variant = "h5">{chatName}</Typography>
                         <Box sx = {{ flexGrow : 1}}/>
                         <IconBtn title = {"Movies"} icon = {<MovieCreationIcon/>} onClick = {openMovieList}/>
@@ -219,7 +238,7 @@ const Chat = ({ chatId, user }) => {
                 
                 {
                     allMessages.map((item) => (
-                        <MessageComponent key = {item._id} message = {item} user = {user} />
+                        <MessageComponent key = {item._id} message = {item} user = {user} group = {groupChat}/>
                     ))
                 }
 
@@ -258,6 +277,7 @@ const Chat = ({ chatId, user }) => {
             </form>
 
             <FileMenu anchorE1={fileMenuAnchor} chatId = {chatId} />
+            <ChatProfile user = {chatPerson} dispatch={dispatch} chatProfileAnchor = {chatProfileAnchor}/>
         </Fragment>
     )
 }

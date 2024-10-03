@@ -90,7 +90,7 @@ const Groups = () => {
         setConfirmDeleteDialog(true);
     };
     const deleteHandler = () => {
-        deleteChat("Deleting chat...", { chatId });
+        deleteChat("Deleting chat...", chatId);
         closeConfirmDeleteHandler();
         navigate("/");
     };
@@ -102,19 +102,6 @@ const Groups = () => {
     const removeMemberHandler = (userId) => {
         removeMember("Removing member...", { userId, chatId });
     }
-
-    useEffect(() => {
-        if(chatId) {
-            setGroupName(`Group Name ${chatId}`);
-            setGroupNameUpdateValue(`Group Name ${chatId}`);
-        }
-
-        return () => {
-            setGroupName("");
-            setGroupNameUpdateValue("");
-            setIsEdit(false);
-        }
-    }, [chatId])
 
     const IconBtns = (
         <>

@@ -10,6 +10,7 @@ const initialState = {
     isFileMenu: false,
     isDeleteMenu: false,
     isProfile: false,
+    isChatProfile: false,
     isVideo: false,
     showVideo: false,
     uploadingLoader: false,
@@ -54,6 +55,9 @@ const miscSlice = createSlice({
         setIsProfile: (state, action) => {
             state.isProfile = action.payload;
         },
+        setIsChatProfile: (state, action) => {
+            state.isChatProfile = action.payload;
+        },
         setIsVideo: (state, action) => {
             state.isVideo = action.payload;
         },
@@ -92,6 +96,7 @@ export const {
     setIsFileMenu,
     setIsDeleteMenu,
     setIsProfile,
+    setIsChatProfile,
     setIsVideo,
     setShowVideo,
     setUploadingLoader,
