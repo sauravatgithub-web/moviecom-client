@@ -1,15 +1,15 @@
 import { Box, Dialog, DialogTitle, IconButton, List, Stack, Typography } from '@mui/material';
 import React, { useState, useCallback, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setIsMovie, setUploadingLoader } from '../../redux/reducers/misc';
-import { borderBlueColor, deleteIconColor, headerDialogColor } from '../constants/color';
+import { setIsMovie, setUploadingLoader } from '../../redux/reducers/misc.js';
+import { borderBlueColor, deleteIconColor, headerDialogColor } from '../constants/color.js';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { server } from '../constants/config';
+import { server } from '../constants/config.js';
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import toast from 'react-hot-toast';
-import { useDeleteMovieMutation, useUploadMovieMutation } from '../../redux/api/api';
-import { getSocket } from '../../socket';
+import { useDeleteMovieMutation, useUploadMovieMutation } from '../../redux/api/api.js';
+import { getSocket } from '../../socket.jsx';
 import { renameFile } from '../../utils/nameCorrector.js'
 
 const MovieDialog = ({ chatId, chatName, members, movies }) => {

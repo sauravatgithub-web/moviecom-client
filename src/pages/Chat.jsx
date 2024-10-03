@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import peer from '../service/peer.js'
 import ChatProfile from '../components/specefic/ChatProfile.jsx';
 
-const MovieDialog = lazy(() => import('../components/specefic/MovieDialog.jsx'));
+const MovieDialog = lazy(() => import('../components/dialogues/MovieDialog.jsx'));
 
 const Chat = ({ chatId, user }) => {
     const bottomRef = useRef(null);
@@ -79,6 +79,7 @@ const Chat = ({ chatId, user }) => {
     else avatar = avatars?.group;
 
     const chatPerson = { name : chatName, avatar, bio, username, createdAt, groupChat }
+    const memberIds = members?.map(member => member._id);
 
     const messageOnChange = (e) => {
         setMessage(e.target.value);
@@ -182,7 +183,7 @@ const Chat = ({ chatId, user }) => {
         dispatch(setIsVideo(true));
         dispatch(setShowVideo(true));
         const offer = await peer.getOffer();
-        socket.emit("make-call", { chatId, members, user, offer });
+        socket.emit("make-call", { chatId, members : memberIds, user, offer });
     }
 
     const callRejectedHandler = useCallback(() => {
@@ -220,7 +221,7 @@ const Chat = ({ chatId, user }) => {
             </Box>
             {isMovie && (
                 <Suspense fallback = {<Backdrop open/>}>
-                    <MovieDialog chatId = {chatId} chatName = {chatName} members = {members} movies = {movies}/>
+                    <MovieDialog chatId = {chatId} chatName = {chatName} members = {memberIds} movies = {movies}/>
                 </Suspense>
             )}
             <Stack 

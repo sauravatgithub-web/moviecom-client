@@ -156,7 +156,6 @@ const AppLayout = () => (WrappedComponent) => {
         const handleAcceptRequest = useCallback(({movieMembers, movie}) => {
             setMovie(movie);
             setMovieMembers(movieMembers);
-            console.log("Ture");
             dispatch(setShowMovie(true));
         })
 

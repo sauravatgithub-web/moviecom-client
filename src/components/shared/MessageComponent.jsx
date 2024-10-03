@@ -29,7 +29,7 @@ const MessageComponent = ({ message, user, group }) => {
                     bgcolor: "black"
                 }
             }}
-        >
+        >   
             {group && !sameSender && <Typography color = {lightBlue} fontWeight = {"600"} variant = "caption">{sender.name}</Typography>}
             {content && <Typography>{content}</Typography>}
         
@@ -43,7 +43,7 @@ const MessageComponent = ({ message, user, group }) => {
                 </Box>
             })}
 
-            <Typography variant="caption" color = "text.secondary">{time}</Typography>
+            <Typography variant = "caption" color = "text.secondary">{time}</Typography>
         </div>
     )
 }

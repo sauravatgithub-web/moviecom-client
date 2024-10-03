@@ -4,9 +4,12 @@ import { Stack, IconButton } from '@mui/material'
 import { buttonBackgroundColor } from '../components/constants/color'
 import { buttonStyle, iconStyle } from '../lib/features'
 import { getSocket } from '../socket'
+import { setShowMovie } from '../redux/reducers/misc'
+import { useDispatch } from 'react-redux'
 
 const Movie = ({movieMembers, movie}) => {
     const socket = getSocket();
+    const dispatch = useDispatch();
 
     const videoPlayer = useRef(null);
     const [isPlaying, setIsPlaying] = useState(true); 
@@ -27,7 +30,15 @@ const Movie = ({movieMembers, movie}) => {
         }
     };
 
-    const cancelHandler = () => {};
+    const cancelHandler = () => {
+        if(videoPlayer) {
+            pauseHandler();
+            socket.emit('cancel', {movieMembers});
+            videoPlayer.current = null;
+            setIsPlaying(false);
+            dispatch(setShowMovie(false));
+        }
+    };
 
     const handlePlay = useCallback(({time}) => {
         if(videoPlayer) {
@@ -45,14 +56,24 @@ const Movie = ({movieMembers, movie}) => {
         }
     })
 
+    const handleCancel = useCallback(() => {
+        if(videoPlayer) {
+            videoPlayer.current = null;
+            setIsPlaying(false);
+            dispatch(setShowMovie(false));
+        }
+    })
+
     useEffect(() => {
         socket.on('play', handlePlay);
         socket.on('pause', handlePause);
+        socket.on('cancel', handleCancel);
         return () => {
             socket.off('play', handlePlay);
             socket.off('pause', handlePause);
+            socket.off('cancel', handleCancel);
         }
-    }, [handlePlay, handlePause])
+    }, [handlePlay, handlePause, handleCancel])
 
     return (
         <>
