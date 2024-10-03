@@ -17,9 +17,7 @@ import { useErrors } from '../../hooks/hooks'
 
 const Dashboard = () => {
     const { loading, data, error } = useFetchData(`${server}/api/v1/admin/stats`, "dashboard-stats")
-    
     const { stats } = data || {};
-
     useErrors([{ isError: error, error: error }])
 
     const Appbar = (
@@ -89,7 +87,7 @@ const Dashboard = () => {
                                 maxWidth: "25rem"
                             }}
                         >
-                            <DoughnutChart labels = {["Single Chats", "Group Chats"]} value = {[stats?.totalChatsCount - stats?.groupsChat || 0, stats?.groupsChat || 0]} />
+                            <DoughnutChart labels = {["Single Chats", "Group Chats"]} value = {[stats?.totalChatsCount - stats?.groupsCount || 0, stats?.groupsCount || 0]} />
                             <Stack 
                                 position={"absolute"}
                                 direction = {"row"}

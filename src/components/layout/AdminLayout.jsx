@@ -57,7 +57,7 @@ const SideBar = ({w = "100%"}) => {
     return (
         <Stack width = {w} direction = {"column"} p = {"3rem"} spacing = {"3rem"}>
             <Typography variant='h5' textTransform={"uppercase"}>
-                Project Chat
+                Moviecom
             </Typography>
             <Stack spacing={"1rem"}>
                 {adminTabs.map((tab) => (
@@ -121,7 +121,7 @@ const AdminLayout = ({ children }) => {
             <Grid item 
                 xs = {12} md = {8} lg = {9}
                 sx = {{
-                    bgcolor: "#dbc4c4",
+                    bgcolor: "#c4c9db",
                 }}
             >
                 {children}

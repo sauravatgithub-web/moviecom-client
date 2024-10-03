@@ -45,7 +45,6 @@ const columns = [
 
 const UserManage = () => {
     const { loading, data, error } = useFetchData(`${server}/api/v1/admin/users`, "dashboard-users")
-
     useErrors([{ isError: error, error: error }])
 
     const [rows, setRows] = useState([]);

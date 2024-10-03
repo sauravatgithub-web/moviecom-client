@@ -1,5 +1,5 @@
 import React from 'react'
-import {DataGrid} from '@mui/x-data-grid'
+import { DataGrid } from '@mui/x-data-grid'
 import { Container, Paper, Typography } from '@mui/material'
 
 const Table = ({rows, columns, heading, rowHeight = 52}) => {
@@ -29,7 +29,7 @@ const Table = ({rows, columns, heading, rowHeight = 52}) => {
                 >
                     {heading}
                 </Typography>
-                <DataGrid rows = {rows} columns = {columns} rowHeight={rowHeight}
+                <DataGrid rows = {rows} columns = {columns} rowHeight = {rowHeight}
                     style = {{ height: "80%" }}
                     sx = {{
                         border: "none",

@@ -1,4 +1,4 @@
-import { Avatar, Box, Stack } from '@mui/material'
+import { Avatar, Box, Stack, Skeleton } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Table from '../../components/shared/Table'
 import AdminLayout from '../../components/layout/AdminLayout'
@@ -79,14 +79,15 @@ const columns = [
 
 
 const MessageManage = () => {
-    const { loading, data, error } = useFetchData(`${server}/api/v1/admin/chats`, "dashboard-chats")
+    const { loading, data, error } = useFetchData(`${server}/api/v1/admin/messages`, "dashboard-chats")
 
     useErrors([{ isError: error, error: error }])
     const [rows, setRows] = useState([]);
+    console.log(data);
 
     useEffect(() => {
         if(data) {
-            setRows(data.messages.map((item) => ({
+            setRows(data?.messages?.map((item) => ({
                 ...item,
                 id: item._id,
                 sender: {

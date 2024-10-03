@@ -1,5 +1,5 @@
 import React from 'react'
-import {Line, Doughnut} from "react-chartjs-2"
+import { Line, Doughnut } from "react-chartjs-2"
 import {
     ArcElement, 
     Chart as ChartJS, 
