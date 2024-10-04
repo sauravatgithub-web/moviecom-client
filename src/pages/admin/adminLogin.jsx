@@ -4,8 +4,7 @@ import { Button, Container, Paper, TextField, Typography } from '@mui/material'
 import { Navigate } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux"
 import { adminLogin, getAdmin } from '../../redux/thunk/admin';
-
-const isAdmin = true;
+import { adminBackgroundColor } from '../../components/constants/color';
 
 const AdminLogin = () => {
     const secretKey = useInputValidation("");
@@ -24,12 +23,13 @@ const AdminLogin = () => {
     if(isAdmin) return <Navigate to = '/admin/dashboard' />;
 
     return (
-        <Container component = {"main"} maxWidth = "xs" 
+        <Container component = {"main"} maxWidth = "100vw" 
             sx = {{
                 height : "100vh",
                 display : "flex",
                 justifyContent: "center",
-                alignItems : "center"
+                alignItems : "center",
+                background: adminBackgroundColor
             }}
         >
             <Paper 
@@ -40,7 +40,6 @@ const AdminLogin = () => {
                     flexDirection : "column",
                     alignItems : "center",
                 }}
-                backgroundColor =  {"linear-gradient(45deg, #ff0000, #ff7f7f)"}
             >
                 
                 <Typography variant = "h5">Admin Login</Typography>

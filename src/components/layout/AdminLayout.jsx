@@ -9,7 +9,7 @@ import {
     Message as MessageIcon,
     ExitToApp as ExitToAppIcon
 } from '@mui/icons-material'
-import { useLocation, Link as LinkComponent, Navigate } from 'react-router-dom'
+import { useLocation, Link as LinkComponent, Navigate, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { adminLogout } from '../../redux/thunk/admin'
 
@@ -49,9 +49,11 @@ export const adminTabs = [
 const SideBar = ({w = "100%"}) => {
     const location = useLocation();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const logOutHandler = () => {
         dispatch(adminLogout());
+        navigate('/');
     };
 
     return (

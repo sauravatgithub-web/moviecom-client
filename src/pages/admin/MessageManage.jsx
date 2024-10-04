@@ -23,8 +23,8 @@ const columns = [
         width: 200,
         renderCell: (params) => {
             const {attachments} = params.row;
-            return attachments.length > 0 ? (
-                attachments.map((item) => {
+            return attachments?.length > 0 ? (
+                attachments?.map((item) => {
                     const url = item.url;
                     const file = fileFormat(url);
 

@@ -25,6 +25,7 @@ export const borderBlueColor = "#3838ef";
 export const groupListColor = "#284db3";
 
 export const buttonBackgroundColor = "#383c61";
+export const adminBackgroundColor = "linear-gradient(45deg, #2a83ff, #857fff)";
 
 export const theme = createTheme({
     palette: {

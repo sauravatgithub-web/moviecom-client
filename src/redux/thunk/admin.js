@@ -22,7 +22,7 @@ const getAdmin = createAsyncThunk("admin/getAdmin", async() => {
             withCredentials: true,
         }
         const { data } = await axios.get(`${server}/api/v1/admin/`, config)
-        return data.message;
+        return data.admin;
     } 
     catch (error) {
         throw error.message.data.message;
@@ -34,7 +34,7 @@ const adminLogout = createAsyncThunk("/admin/logout", async() => {
         const config = {
             withCredentials: true,
         }
-        const { data } = await axios.post(`${server}/api/v1/admin/logout`, config);
+        const { data } = await axios.post(`${server}/api/v1/admin/logout`, null, config);
         return data.message;
     }
     catch (error){
