@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { CallEnd as CallEndIcon } from '@mui/icons-material'
-import { IconButton, Stack, Typography } from '@mui/material'
 import ReactPlayer from 'react-player'
-import { endCallColor } from '../components/constants/color'
+import Draggable from 'react-draggable';
 import { useDispatch, useSelector } from 'react-redux'
+import { CallEnd as CallEndIcon } from '@mui/icons-material'
+import { Box, IconButton, Stack, Typography } from '@mui/material'
+import { endCallColor } from '../components/constants/color'
 import { setCalling, setIsVideo, setShowVideo } from '../redux/reducers/misc'
 import { getSocket } from '../socket'
 import peer from '../service/peer'
@@ -14,7 +15,7 @@ const Room = ({ callMembers }) => {
     
     const [myStream, setMyStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
-    const { calling, showVideo } = useSelector((state) => state.misc);
+    const { calling, showMovie, showVideo } = useSelector((state) => state.misc);
 
     const sendStreams = useCallback(() => {
         if (myStream) {
@@ -133,27 +134,46 @@ const Room = ({ callMembers }) => {
 
     return (
         <>  
-            {calling ? (
-                <Stack sx = {{ height: "100%", width: "100%", justifyContent: "center", alignItems: "center" }}>
-                    <Typography variant = "h4" sx = {{ marginBottom: "2rem", color: "white" }}>Ringing...</Typography>
-                    <ReactPlayer height = "50%" width = "70%" url = {myStream} playing style = {{ borderRadius: 20 }}/>
-                </Stack>
-            ) : (
-                <Stack sx={{ position: 'relative', height: '100%', width: '100%' }}>
-                    <div style={{ position: 'absolute', top: '10%', left: '10%', height: "40%", width: "30%", zIndex: 2, }}>
-                        <ReactPlayer height="100%" width="100%" url={myStream} playing style = {{ borderRadius: 20 }}/>
-                    </div>
-                    <ReactPlayer height="100%" width="100%" url={remoteStream} playing />
-                </Stack>
+            {!showMovie && (
+                <>
+                    {calling ? (
+                        <Stack sx = {{ height: "100%", width: "100%", justifyContent: "center", alignItems: "center" }}>
+                            <Typography variant = "h4" sx = {{ marginBottom: "2rem", color: "white" }}>Ringing...</Typography>
+                            <ReactPlayer height = "50%" width = "70%" url = {myStream} playing style = {{ borderRadius: 20 }}/>
+                        </Stack>
+                    ) : (
+                        <Stack sx={{ position: 'relative', height: '100%', width: '100%' }}>
+                            <div style={{ position: 'absolute', top: '10%', left: '10%', height: "40%", width: "30%", zIndex: 2, }}>
+                                <ReactPlayer height="100%" width="100%" url={myStream} playing style = {{ borderRadius: 20 }}/>
+                            </div>
+                            <ReactPlayer height="100%" width="100%" url={remoteStream} playing />
+                        </Stack>
+                    )}
+                </>
             )}
+            {showMovie && 
+                <Draggable>
+                    <Box
+                        sx={{
+                            position: 'fixed',
+                            bottom: '1rem',
+                            right: '1rem',
+                            zIndex: 1000, 
+                        }}
+                    >
+                        <ReactPlayer height="50%" width="70%" url={remoteStream} playing />
+                    </Box>
+                </Draggable>
+            }
+            
             <IconButton onClick = {endCallHandler} sx = {{
-                height: "4rem",
-                width: "4rem",
+                height: showMovie ? "6rem" : "4rem",
+                width: showMovie ? "6rem" : "4rem",
                 borderRadius: 40,
                 backgroundColor: endCallColor,
                 zIndex: 2,
                 position: "fixed",
-                left: "50%",
+                left: !showMovie ? "50%" : "10%",
                 transform: "translateX(-50%)",
                 bottom: "1rem",
                 "&:hover": {

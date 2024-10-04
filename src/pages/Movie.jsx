@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
-import { Cancel as CancelIcon, Pause as PauseIcon, PlayArrow as PlayIcon } from '@mui/icons-material'
+import { Cancel as CancelIcon, Duo as CallIcon, Pause as PauseIcon, PlayArrow as PlayIcon } from '@mui/icons-material'
 import { Stack, IconButton } from '@mui/material'
 import { buttonBackgroundColor } from '../components/constants/color'
 import { buttonStyle, iconStyle } from '../lib/features'
 import { getSocket } from '../socket'
-import { setShowMovie } from '../redux/reducers/misc'
+import { setCalling, setIsVideo, setShowMovie, setShowVideo } from '../redux/reducers/misc'
 import { useDispatch } from 'react-redux'
+import peer from '../service/peer.js'
 
-const Movie = ({movieMembers, movie}) => {
+const Movie = ({ movieMembers, movie, user, chatId }) => {
     const socket = getSocket();
     const dispatch = useDispatch();
 
@@ -64,6 +65,15 @@ const Movie = ({movieMembers, movie}) => {
         }
     })
 
+    const callHandler = async (e) => {
+        e.stopPropagation();
+        dispatch(setCalling(true));
+        dispatch(setIsVideo(true));
+        dispatch(setShowVideo(true));
+        const offer = await peer.getOffer();
+        socket.emit("make-call", { chatId, members : movieMembers, user, offer });
+    }
+
     useEffect(() => {
         socket.on('play', handlePlay);
         socket.on('pause', handlePause);
@@ -84,7 +94,7 @@ const Movie = ({movieMembers, movie}) => {
             </div>
             <Stack direction={"row"} spacing = {"1rem"} sx = {{
                 borderRadius: 20,
-                zIndex: 2,
+                zIndex: 400,
                 position: "fixed",
                 left: "50%",
                 transform: "translateX(-50%)",
@@ -99,6 +109,9 @@ const Movie = ({movieMembers, movie}) => {
                 </IconButton>
                 <IconButton onClick = {cancelHandler} sx = {{...buttonStyle, backgroundColor: "#ff5252"}}>
                     <CancelIcon sx = {iconStyle}/>
+                </IconButton>
+                <IconButton onClick = {callHandler} sx = {buttonStyle}>
+                    <CallIcon sx = {iconStyle}/>
                 </IconButton>
             </Stack>
         </>

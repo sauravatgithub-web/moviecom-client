@@ -204,7 +204,7 @@ const AppLayout = () => (WrappedComponent) => {
                         border: '1px solid black'
                     }}>
                         {isVideo && <Room callMembers = {callMembers} />}
-                        {showMovie && <Movie movielMembers = {movieMembers} movie = {movie} />}
+                        {showMovie && <Movie movieMembers = {movieMembers} movie = {movie} user = {user} chatId = {chatId} />}
                     </div>
                 }
 
