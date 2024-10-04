@@ -77,7 +77,7 @@ const ChatManage = () => {
 
     useEffect(() => {
         if(data){
-            setRows(data.chats.map((item) => (
+            setRows(data?.chats?.map((item) => (
             {
                 ...item, 
                 id: item._id, 

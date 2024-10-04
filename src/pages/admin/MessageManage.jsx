@@ -83,7 +83,6 @@ const MessageManage = () => {
 
     useErrors([{ isError: error, error: error }])
     const [rows, setRows] = useState([]);
-    console.log(data);
 
     useEffect(() => {
         if(data) {
