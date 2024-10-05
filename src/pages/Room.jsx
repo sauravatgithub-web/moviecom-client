@@ -2,12 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react'
 import ReactPlayer from 'react-player'
 import Draggable from 'react-draggable';
 import { useDispatch, useSelector } from 'react-redux'
+
 import { CallEnd as CallEndIcon } from '@mui/icons-material'
 import { Box, IconButton, Stack, Typography } from '@mui/material'
+
+import peer from '../service/peer'
+import { getSocket } from '../socket'
+import { useSocketEvents } from '../hooks/hooks';
 import { endCallColor } from '../components/constants/color'
 import { setCalling, setIsVideo, setShowVideo } from '../redux/reducers/misc'
-import { getSocket } from '../socket'
-import peer from '../service/peer'
+import { CALL_ACCEPTED, END_CALL, PEER_NEGOTIATION_FINAL, PEER_NEGOTIATION_NEEDED } from '../components/constants/events';
 
 const Room = ({ callMembers }) => {
     const dispatch = useDispatch();
@@ -114,23 +118,19 @@ const Room = ({ callMembers }) => {
     }, []);
 
     useEffect(() => {
-        socket?.on('call-accepted', processCallHandler);
-        socket.on('peer-negotiation-needed', handleIncomingNegotiation);
-        socket.on('peer-negotiation-final', handleNegotiationFinal);
-        socket.on('end-call', handleEnd);
-        return () => {
-            socket?.off('call-accepted', processCallHandler);
-            socket.off('peer-negotiation-needed', handleIncomingNegotiation);
-            socket.off('peer-negotiation-final', handleNegotiationFinal);
-            socket.off('end-call', handleEnd);
-        };
-    }, [socket, processCallHandler, handleIncomingNegotiation, handleNegotiationFinal, handleEnd]);
-
-    useEffect(() => {
         if (myStream) {
             sendStreams();
         }
     }, [myStream, sendStreams]);
+
+    const eventHandlers = {
+        [CALL_ACCEPTED]: processCallHandler,
+        [PEER_NEGOTIATION_NEEDED]: handleIncomingNegotiation,
+        [PEER_NEGOTIATION_FINAL]: handleNegotiationFinal,
+        [END_CALL]: handleEnd
+    }
+    useSocketEvents(socket, eventHandlers);
+
 
     return (
         <>  
@@ -143,9 +143,11 @@ const Room = ({ callMembers }) => {
                         </Stack>
                     ) : (
                         <Stack sx={{ position: 'relative', height: '100%', width: '100%' }}>
-                            <div style={{ position: 'absolute', top: '10%', left: '10%', height: "40%", width: "30%", zIndex: 2, }}>
-                                <ReactPlayer height="100%" width="100%" url={myStream} playing style = {{ borderRadius: 20 }}/>
-                            </div>
+                            <Draggable>
+                                <div style={{ position: 'absolute', top: '10%', left: '10%', height: "40%", width: "30%", zIndex: 2, }}>
+                                    <ReactPlayer height="100%" width="100%" url={myStream} playing style = {{ borderRadius: 20 }}/>
+                                </div>
+                            </Draggable>
                             <ReactPlayer height="100%" width="100%" url={remoteStream} playing />
                         </Stack>
                     )}

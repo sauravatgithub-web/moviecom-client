@@ -1,37 +1,39 @@
 import React, { Suspense, lazy, memo, useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { Backdrop, Box, Button, CircularProgress, Drawer, Grid, IconButton, Stack, TextField, Tooltip, Typography } from '@mui/material'
 import { Add as AddIcon, Delete as DeleteIcon, Done as DoneIcon, Edit as EditIcon, KeyboardBackspace as KeyboardBackspaceIcon, Menu as MenuIcon} from '@mui/icons-material'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { Link } from '../components/styles/StyledComponents'
-import AvatarCard from '../components/shared/AvatarCard'
+
 import UserItem from '../components/shared/UserItem'
-import { useAsyncMutation, useErrors } from '../hooks/hooks.jsx';
-import { LayoutLoader } from '../components/layout/Loaders.jsx'
-import { useChatDetailsQuery, useDeleteChatMutation, useMyGroupsQuery, useRemoveMemberMutation, useRenameGroupMutation } from '../redux/api/api.js'
-import { useDispatch, useSelector } from 'react-redux'
+import AvatarCard from '../components/shared/AvatarCard'
 import { setIsAddMember } from '../redux/reducers/misc.js'
+import { Link } from '../components/styles/StyledComponents'
+import { LayoutLoader } from '../components/layout/Loaders.jsx'
+import { useAsyncMutation, useErrors } from '../hooks/hooks.jsx';
 import { groupListColor } from '../components/constants/color.js'
+import { useChatDetailsQuery, useDeleteChatMutation, useMyGroupsQuery, useRemoveMemberMutation, useRenameGroupMutation } from '../redux/api/api.js'
 
 const Groups = () => {
-    const chatId = useSearchParams()[0].get("group");
     const navigate = useNavigate(); 
     const dispatch = useDispatch(); 
-
+    
     const myGroups = useMyGroupsQuery("");
+    const chatId = useSearchParams()[0].get("group");
 
-    const groupDetails = useChatDetailsQuery({ chatId, populate: true }, { skip: !chatId });
     const { isAddMember } = useSelector((state) => state.misc)
+    const groupDetails = useChatDetailsQuery({ chatId, populate: true }, { skip: !chatId });
 
-    const [changeGroupName, isLoadingChangeGroupName] = useAsyncMutation(useRenameGroupMutation);
-    const [removeMember, isLoadingRemoveMember] = useAsyncMutation(useRemoveMemberMutation);
     const [deleteChat, isLoadingDeleteChat] = useAsyncMutation(useDeleteChatMutation);
+    const [removeMember, isLoadingRemoveMember] = useAsyncMutation(useRemoveMemberMutation);
+    const [changeGroupName, isLoadingChangeGroupName] = useAsyncMutation(useRenameGroupMutation);
 
-    const [isMobileMenu, setIsMobileMenu] = useState(false);
+    const [members, setMembers] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
     const [groupName, setGroupName] = useState("");
+    const [isMobileMenu, setIsMobileMenu] = useState(false);
     const [groupNameUpdateValue, setGroupNameUpdateValue] = useState("");
     const [confirmDeleteDialog, setConfirmDeleteDialog] = useState(false);
-    const [members, setMembers] = useState([]);
     
     const AddMemberDialog = lazy(() => import("../components/dialogues/AddMemberDialog"));
     const ConfirmDeleteDialog = lazy(() => import("../components/dialogues/ConfirmDeleteDialog"));

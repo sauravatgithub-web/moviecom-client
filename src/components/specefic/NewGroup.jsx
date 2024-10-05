@@ -1,12 +1,14 @@
-import { Button, Dialog, DialogTitle, Skeleton, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { useInputValidation } from '6pp'
-import UserItem from '../shared/UserItem';
+import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
+import { useInputValidation } from '6pp'
+
+import { Button, Dialog, DialogTitle, Skeleton, Stack, TextField, Typography } from '@mui/material'
+
+import UserItem from '../shared/UserItem';
 import { useAvailaibleFriendsQuery, useNewGroupMutation } from '../../redux/api/api';
 import { useErrors, useAsyncMutation } from '../../hooks/hooks';
 import { setIsNewGroup } from '../../redux/reducers/misc';
-import toast from 'react-hot-toast';
 import { headerDialogColor } from '../constants/color';
 
 const NewGroup = () => {

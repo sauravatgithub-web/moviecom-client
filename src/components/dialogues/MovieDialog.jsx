@@ -1,16 +1,15 @@
-import { Box, Dialog, DialogTitle, IconButton, List, Stack, Typography } from '@mui/material';
-import React, { useState, useCallback, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { setIsMovie, setUploadingLoader } from '../../redux/reducers/misc.js';
-import { borderBlueColor, deleteIconColor, headerDialogColor } from '../constants/color.js';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { server } from '../constants/config.js';
-import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import React, { useRef } from 'react'
 import toast from 'react-hot-toast';
-import { useDeleteMovieMutation, useUploadMovieMutation } from '../../redux/api/api.js';
+import { useDispatch, useSelector } from 'react-redux'
+
+import { Box, Dialog, DialogTitle, IconButton, List, Stack, Typography } from '@mui/material';
+import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
+
 import { getSocket } from '../../socket.jsx';
 import { renameFile } from '../../utils/nameCorrector.js'
+import { setIsMovie, setUploadingLoader } from '../../redux/reducers/misc.js';
+import { useDeleteMovieMutation, useUploadMovieMutation } from '../../redux/api/api.js';
+import { borderBlueColor, deleteIconColor, headerDialogColor } from '../constants/color.js';
 
 const MovieDialog = ({ chatId, chatName, members, movies }) => {
     const dispatch = useDispatch();

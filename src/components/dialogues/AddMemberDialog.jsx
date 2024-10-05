@@ -1,12 +1,14 @@
-import { Button, Dialog, DialogTitle, Skeleton, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { Button, Dialog, DialogTitle, Skeleton, Stack, Typography } from '@mui/material'
+
 import UserItem from '../shared/UserItem'
 import { useAsyncMutation, useErrors } from '../../hooks/hooks'
 import { useAddMemberMutation, useAvailaibleFriendsQuery } from '../../redux/api/api'
-import { useDispatch, useSelector } from 'react-redux'
 import { setIsAddMember } from '../../redux/reducers/misc'
 
-const AddMemberDialog = ({chatId}) => {
+const AddMemberDialog = ({ chatId }) => {
     const dispatch = useDispatch();
     const [addMember, isLoadingAddMember] = useAsyncMutation(useAddMemberMutation);
     const {isLoading, data} = useAvailaibleFriendsQuery(chatId);
@@ -35,7 +37,6 @@ const AddMemberDialog = ({chatId}) => {
     const errors = [];
     useErrors(errors);
 
-
     return (
         <Dialog open={isAddMember} onClose = {closeHandler}>
             <Stack spacing = {"1rem"} width = {"19rem"} p = {"1rem"}>
@@ -56,7 +57,6 @@ const AddMemberDialog = ({chatId}) => {
                         )
                     }
                 </Stack>
-                
                 <Stack direction={"row"} justifyContent={"space-evenly"}>
                     <Button color = "error" variant = "outlined" onClick = {closeHandler}>Cancel</Button>
                     <Button variant = "contained" onClick = {addMemberSubmitHandler} disabled = {isLoadingAddMember}>Submit Changes</Button>

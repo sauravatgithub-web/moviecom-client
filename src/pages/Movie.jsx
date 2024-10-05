@@ -1,12 +1,16 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
-import { Cancel as CancelIcon, Duo as CallIcon, Pause as PauseIcon, PlayArrow as PlayIcon } from '@mui/icons-material'
-import { Stack, IconButton } from '@mui/material'
-import { buttonBackgroundColor } from '../components/constants/color'
-import { buttonStyle, iconStyle } from '../lib/features'
-import { getSocket } from '../socket'
-import { setCalling, setIsVideo, setShowMovie, setShowVideo } from '../redux/reducers/misc'
 import { useDispatch } from 'react-redux'
+
+import { Stack, IconButton } from '@mui/material'
+import { Cancel as CancelIcon, Duo as CallIcon, Pause as PauseIcon, PlayArrow as PlayIcon } from '@mui/icons-material'
+
+import { getSocket } from '../socket'
 import peer from '../service/peer.js'
+import { useSocketEvents } from '../hooks/hooks.jsx'
+import { buttonStyle, iconStyle } from '../lib/features'
+import { buttonBackgroundColor } from '../components/constants/color'
+import { CANCEL, PAUSE, PLAY } from '../components/constants/events.js'
+import { setCalling, setIsVideo, setShowMovie, setShowVideo } from '../redux/reducers/misc'
 
 const Movie = ({ movieMembers, movie, user, chatId }) => {
     const socket = getSocket();
@@ -74,16 +78,13 @@ const Movie = ({ movieMembers, movie, user, chatId }) => {
         socket.emit("make-call", { chatId, members : movieMembers, user, offer });
     }
 
-    useEffect(() => {
-        socket.on('play', handlePlay);
-        socket.on('pause', handlePause);
-        socket.on('cancel', handleCancel);
-        return () => {
-            socket.off('play', handlePlay);
-            socket.off('pause', handlePause);
-            socket.off('cancel', handleCancel);
-        }
-    }, [handlePlay, handlePause, handleCancel])
+    const eventHandlers = {
+        [PLAY]: handlePlay,
+        [PAUSE]: handlePause,
+        [CANCEL]: handleCancel
+    }
+    useSocketEvents(socket, eventHandlers);
+
 
     return (
         <>

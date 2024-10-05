@@ -1,12 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
+import ReactPlayer from 'react-player';
+
 import { Box, Button, Dialog, DialogActions, DialogTitle, DialogContent, Divider, ListItemText, Menu, MenuItem, MenuList, Tooltip } from '@mui/material'
 import { AddAPhoto as AddAPhotoIcon, AudioFile as AudioFileIcon, Image as ImageIcon, UploadFile as UploadFileIcon, VideoFile as VideoFileIcon } from '@mui/icons-material';
+
 import { setIsFileMenu, setUploadingLoader } from '../../redux/reducers/misc';
 import { useSendAttachmentMutation } from '../../redux/api/api';
-import fileIcon from '../../../fileIcon.png'
-import ReactPlayer from 'react-player';
+import fileIcon from '../../assets/fileIcon.png'
 
 const FileMenu = ({ anchorE1, chatId }) => {
     const dispatch  = useDispatch();
@@ -58,7 +60,7 @@ const FileMenu = ({ anchorE1, chatId }) => {
     const sendFiles = async () => {
         if (selectedFiles.length === 0) {
             toast.error('No files to send.');
-            return; // Prevent sending if no files are selected
+            return; 
         }
     
         dispatch(setUploadingLoader(true));
@@ -80,7 +82,7 @@ const FileMenu = ({ anchorE1, chatId }) => {
             toast.error('Error sending files.', { id: toastId });
         } finally {
             dispatch(setUploadingLoader(false));
-            setSelectedFiles([]); // Clear the selected files after sending
+            setSelectedFiles([]); 
         }
     };
 

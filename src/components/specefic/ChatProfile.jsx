@@ -1,7 +1,9 @@
 import React from 'react'
+import moment from 'moment';
+
 import { Avatar, Popover, Stack, Typography } from '@mui/material'
 import { Face as FaceIcon, AlternateEmail as UserNameIcon, CalendarMonth as CalendarIcon } from '@mui/icons-material'
-import moment from 'moment';
+
 import { transformImage } from '../../lib/features';
 import { useSelector } from 'react-redux';
 import { setIsChatProfile } from '../../redux/reducers/misc';
@@ -41,13 +43,13 @@ const ChatProfile = ({ user, dispatch, chatProfileAnchor }) => {
                             }}
                         />
                         <Stack direction = "column" spacing = {"1rem"} style = {{ padding: 10 }}>
-                            <ProfileCard text={user?.name} icon={<FaceIcon/>}/>
-                            {!user?.groupChat && <ProfileCard text={user?.username} icon={<UserNameIcon/>}/>}
+                            <ProfileCard text = {user?.name} icon = {<FaceIcon/>}/>
+                            {!user?.groupChat && <ProfileCard text = {user?.username} icon = {<UserNameIcon/>}/>}
                         </Stack>
                     </Stack>
                     <Stack spacing = {"1rem"} style = {{ padding: 10 }}>
-                        <ProfileCard heading={"About"} text = {user?.bio}/>
-                        <ProfileCard text={moment(user?.createdAt).fromNow()} icon={<CalendarIcon/>}/>
+                        <ProfileCard heading = {"About"} text = {user?.bio}/>
+                        <ProfileCard text = {moment(user?.createdAt).fromNow()} icon = {<CalendarIcon/>}/>
                     </Stack>
                 </Stack>
             </div>
@@ -57,16 +59,16 @@ const ChatProfile = ({ user, dispatch, chatProfileAnchor }) => {
 
 const ProfileCard = ({text, icon, heading}) => (
     <Stack
-        direction={"row"}
-        alignItems={"center"}
-        spacing={"0.5rem"}
-        color={"black"}
-        textAlign={"center"}
+        direction = {"row"}
+        alignItems = {"center"}
+        spacing = {"0.5rem"}
+        color = {"black"}
+        textAlign = {"center"}
     >
         {icon && icon}
         <Stack style = {{ textAlign: "left" }}>
-            <Typography color = "black" variant='h6'>{heading}</Typography>
-            <Typography variant='body1'>{text}</Typography>
+            <Typography color = "black" variant = 'h6'>{heading}</Typography>
+            <Typography variant = 'body1'>{text}</Typography>
         </Stack>
     </Stack>
 );

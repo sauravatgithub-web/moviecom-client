@@ -1,23 +1,26 @@
 import React, { Fragment, Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react'
-import AppLayout from '../components/layout/AppLayout'
-import { AppBar, Backdrop, Badge, Box, IconButton, Skeleton, Stack, Toolbar, Tooltip, Typography } from '@mui/material'
-import { chatListColor, chatThemeColor, orange } from '../components/constants/color';
-import { AttachFile as AttachFileButton, Duo as VideoCallIcon, Send as SendIcon, MovieCreation as MovieCreationIcon } from '@mui/icons-material';
-import { InputBox } from '../components/styles/StyledComponents';
-import FileMenu from '../components/dialogues/FileMenu';
-import MessageComponent from '../components/shared/MessageComponent'
-import { getSocket } from '../socket';
-import { ALERT, CHAT_JOINED, CHAT_LEAVED, NEW_MESSAGE, START_TYPING, STOP_TYPING } from '../components/constants/events.js';
-import { useChatDetailsQuery, useGetMessagesQuery } from '../redux/api/api.js';
-import { useErrors, useSocketEvents } from '../hooks/hooks.jsx';
-import { useInfiniteScrollTop } from '6pp';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCalling, setIsFileMenu, setIsMovie, setIsChatProfile, setIsVideo, setShowVideo } from '../redux/reducers/misc.js';
-import { removeNewMessagesAlert } from '../redux/reducers/chat.js';
-import { TypingLoader } from '../components/layout/Loaders.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useInfiniteScrollTop } from '6pp';
+
+import { AppBar, Backdrop, Badge, Box, IconButton, Skeleton, Stack, Toolbar, Tooltip, Typography } from '@mui/material'
+import { AttachFile as AttachFileButton, Duo as VideoCallIcon, Send as SendIcon, MovieCreation as MovieCreationIcon } from '@mui/icons-material';
+
 import peer from '../service/peer.js'
+import AppLayout from '../components/layout/AppLayout'
+import FileMenu from '../components/dialogues/FileMenu';
 import ChatProfile from '../components/specefic/ChatProfile.jsx';
+import MessageComponent from '../components/shared/MessageComponent'
+
+import { getSocket } from '../socket';
+import { TypingLoader } from '../components/layout/Loaders.jsx';
+import { useErrors, useSocketEvents } from '../hooks/hooks.jsx';
+import { InputBox } from '../components/styles/StyledComponents';
+import { removeNewMessagesAlert } from '../redux/reducers/chat.js';
+import { useChatDetailsQuery, useGetMessagesQuery } from '../redux/api/api.js';
+import { chatListColor, chatThemeColor, orange } from '../components/constants/color';
+import { ALERT, CALL_REJECTED, CHAT_JOINED, CHAT_LEAVED, NEW_MESSAGE, START_TYPING, STOP_TYPING } from '../components/constants/events.js';
+import { setCalling, setIsFileMenu, setIsMovie, setIsChatProfile, setIsVideo, setShowVideo } from '../redux/reducers/misc.js';
 
 const MovieDialog = lazy(() => import('../components/dialogues/MovieDialog.jsx'));
 
@@ -160,14 +163,6 @@ const Chat = ({ chatId, user }) => {
         setMessages((prev) => [...prev, messageForAlert]);
     })
 
-    const eventHandler = { 
-        [ALERT]: alertListener,
-        [NEW_MESSAGE]: newMessageHandler ,
-        [START_TYPING]: startTypingListener,
-        [STOP_TYPING]: stopTypingListener
-    };
-    useSocketEvents(socket, eventHandler);
-
     useErrors(errors);
 
     const allMessages = [...oldMessages, ...messages];
@@ -191,18 +186,21 @@ const Chat = ({ chatId, user }) => {
         dispatch(setShowVideo(false));
     })
 
-    useEffect(() => {
-        socket.on('call-rejected', callRejectedHandler);
-        return () => {
-            socket.off('call-rejected', callRejectedHandler);
-        }
-    }, [socket, callRejectedHandler]);
-
     const showChatProfile = (e) => {
         e.preventDefault();
         chatProfileAnchor.current = imageRef.current;
         dispatch(setIsChatProfile(true));
     }
+
+    const eventHandler = { 
+        [ALERT]: alertListener,
+        [NEW_MESSAGE]: newMessageHandler ,
+        [START_TYPING]: startTypingListener,
+        [STOP_TYPING]: stopTypingListener,
+        [CALL_REJECTED]: callRejectedHandler
+    };
+    useSocketEvents(socket, eventHandler);
+    
 
     return chatDetails.isLoading ? <Skeleton/> :  (
         <Fragment>

@@ -1,8 +1,10 @@
-import { useInputValidation } from '6pp';
-import { Search as SearchIcon } from '@mui/icons-material';
-import { Dialog, DialogTitle, InputAdornment, List, Stack, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useInputValidation } from '6pp';
+
+import { Search as SearchIcon } from '@mui/icons-material';
+import { Dialog, DialogTitle, InputAdornment, List, Stack, TextField } from '@mui/material';
+
 import { useAsyncMutation } from '../../hooks/hooks';
 import { useLazySearchUserQuery, useSendFriendRequestMutation } from '../../redux/api/api';
 import { setIsSearch } from '../../redux/reducers/misc';
@@ -37,15 +39,15 @@ const Search = () => {
 
     return (
         <Dialog open = {isSearch} onClose = {searchCloseHandler}>
-            <Stack p={"2rem"} direction={"column"} style = {{ backgroundColor: headerDialogColor }}>
-                <DialogTitle textAlign={"center"}>Connect with more</DialogTitle>
+            <Stack p = {"2rem"} direction = {"column"} style = {{ backgroundColor: headerDialogColor }}>
+                <DialogTitle textAlign = {"center"}>Connect with more</DialogTitle>
                 <TextField 
-                    label="" 
-                    value={search.value} 
-                    onChange={search.changeHandler} 
-                    variant="outlined"
-                    size="small"
-                    InputProps={{
+                    label = "" 
+                    value = {search.value} 
+                    onChange = {search.changeHandler} 
+                    variant = "outlined"
+                    size = "small"
+                    InputProps = {{
                         startAdornment: (
                             <InputAdornment position = "start"><SearchIcon/></InputAdornment>
                         )
@@ -55,10 +57,10 @@ const Search = () => {
                 <List>
                     {users.map((user) => (
                         <UserItem 
-                            user={user} 
-                            key={user._id} 
-                            handler={addFriendHandler} 
-                            handlerIsLoading={isLoadingSendFriendRequest}
+                            user = {user} 
+                            key = {user._id} 
+                            handler = {addFriendHandler} 
+                            handlerIsLoading = {isLoadingSendFriendRequest}
                         />
                     ))}
                 </List>

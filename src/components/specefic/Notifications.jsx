@@ -33,7 +33,7 @@ const Notifications = () => {
 
     return (
         <Dialog open = {isNotification} onClose = {closeHandler}>
-            <Stack p={{ xs: "1rem", sm: "2rem"}} maxWidth={"25rem"} style = {{ backgroundColor: headerDialogColor }}>
+            <Stack p = {{ xs: "1rem", sm: "2rem"}} maxWidth = {"25rem"} style = {{ backgroundColor: headerDialogColor }}>
                 <DialogTitle>Notifications</DialogTitle>
 
                 {
@@ -61,7 +61,7 @@ const NotificationItem = memo(({ sender, _id, handler }) => {
     const { name, avatar } = sender;
     return (
         <ListItem>
-            <Stack direction={"row"} alignItems={"center"} spacing={"1rem"} width={"100%"}>
+            <Stack direction = {"row"} alignItems = {"center"} spacing = {"1rem"} width = {"100%"}>
                 <Avatar src = {avatar?.url}/>
                 <Typography variant = "body1"
                     sx = {{
@@ -72,12 +72,12 @@ const NotificationItem = memo(({ sender, _id, handler }) => {
                         overflow: "hidden",
                         textOverflow: "ellipsis"
                     }}
-                    width={"100%"}
+                    width = {"100%"}
                 >{`${name} sent you a friend request.`}</Typography>
                 
                 <Stack direction={{ xs: "columns", sm: "row"}}>
                     <Button onClick = {() => handler( _id, true )}>Accept</Button>
-                    <Button color="error" onClick = {() => handler( _id, false )}>Reject</Button>
+                    <Button color = "error" onClick = {() => handler( _id, false )}>Reject</Button>
                 </Stack>
             </Stack>
         </ListItem>

@@ -1,12 +1,14 @@
 import React, { Suspense, lazy } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast'
+import axios from 'axios';
+
 import { AppBar, Backdrop, Badge, Box, IconButton, Toolbar, Tooltip, Typography } from '@mui/material'
 import {Menu as MenuIcon, Search as SearchIcon, Add as AddIcon, Group as GroupIcon, Logout as LogOutIcon, Notifications as NotificationsIcon, Search} from '@mui/icons-material'
+
 import { lightBlue } from '../constants/color'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios';
 import { server } from '../constants/config'
-import toast from 'react-hot-toast'
-import { useDispatch, useSelector } from 'react-redux';
 import { userNotExists } from '../../redux/reducers/auth'
 import { setIsMobile, setIsSearch, setIsNotification, setIsNewGroup } from '../../redux/reducers/misc'
 import { resetNotification } from '../../redux/reducers/chat'
@@ -14,7 +16,7 @@ import { resetNotification } from '../../redux/reducers/chat'
 const SearchDialog = lazy(() => import("../specefic/Search"));
 const NotificationDialog = lazy(() => import("../specefic/Notifications"));
 const NewGroupDialog = lazy(() => import("../specefic/NewGroup"));
-import icon from './icon.png'
+import icon from '../../assets/icon.png'
 
 const Header = () => {
     const navigate = useNavigate();
@@ -23,8 +25,8 @@ const Header = () => {
     const { isSearch, isNotification, isNewGroup } = useSelector(state => state.misc);
     const { notificationCount } = useSelector(state => state.chat);
 
+    
     const handleMobile = () => dispatch(setIsMobile(true));
-
     const openSearch = () => dispatch(setIsSearch(true));
     const openNewGroup = () => dispatch(setIsNewGroup(true));
     const navigateToGroup = () => navigate("/groups");

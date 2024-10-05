@@ -1,32 +1,34 @@
 import React, { useState } from 'react'
+import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import { useFileHandler, useInputValidation, useStrongPassword } from '6pp';
+
 import { Avatar, Box, Button, Container, IconButton, Paper, Stack, TextField, Typography } from '@mui/material';
 import { CameraAlt as CameraAltIcon } from '@mui/icons-material';
-import { VisuallyHiddenInput } from '../components/styles/StyledComponents';
-import { useFileHandler, useInputValidation, useStrongPassword } from '6pp';
-import { usernameValidator, emailValidator } from '../utils/validators';
-import { useDispatch } from 'react-redux';
-import { userExists } from '../redux/reducers/auth';
-import toast from 'react-hot-toast';
-import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
-import { blueGradientNear, blueGradientFar } from '../components/constants/color';
+
+import Otp from '../components/dialogues/Otp';
+import { setIsOtp } from '../redux/reducers/misc';
+import { userExists } from '../redux/reducers/auth';
 import { server } from '../components/constants/config';
+import { usernameValidator, emailValidator } from '../utils/validators';
+import { VisuallyHiddenInput } from '../components/styles/StyledComponents';
+import { blueGradientNear, blueGradientFar } from '../components/constants/color';
 
 const Login = () => {
-
+    const theme = useTheme();
+    const dispatch = useDispatch();
     const [isLogin, setIsLogin] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    const theme = useTheme();
 
-    const toggleLogin = () => setIsLogin((prev) => !prev);
     const name = useInputValidation("");
+    const password = useStrongPassword();
     const email = useInputValidation("", emailValidator);
     const username = useInputValidation("", usernameValidator);
-    const password = useStrongPassword();
-
+    
     const avatar = useFileHandler("single");
-
-    const dispatch = useDispatch();
+    const toggleLogin = () => setIsLogin((prev) => !prev);
 
     const handleLogIn = async(e) => {
         e.preventDefault();
@@ -102,6 +104,7 @@ const Login = () => {
             setIsLoading(true);
             const { data } = await axios.post(`${server}/api/v1/user/send`, {username: username.value}, config);
             toast(data.success, { id: toastId });
+            dispatch(setIsOtp(true));
         }
         catch(error) {
             toast.error(error?.response?.data?.message || "Something went wrong", { id: toastId });
@@ -112,7 +115,8 @@ const Login = () => {
     return (
         <div style = {{ 
             backgroundImage: `linear-gradient(${blueGradientNear}, ${blueGradientFar})`
-        }}>
+        }}> 
+            <Otp/>
             <Container component = {"main"} maxWidth = "xs"
                 sx = {{
                     marginLeft: { md: 15, lg: 15, xl: 15 },

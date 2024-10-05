@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Avatar, IconButton, Popover, Stack, TextField, Typography } from '@mui/material'
-import {Done as DoneIcon, Edit as EditIcon, Face as FaceIcon, AlternateEmail as UserNameIcon, CalendarMonth as CalendarIcon} from '@mui/icons-material'
-import moment from 'moment';
-import { transformImage } from '../../lib/features';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
+
+import { Avatar, IconButton, Popover, Stack, TextField, Typography } from '@mui/material'
+import { Done as DoneIcon, Edit as EditIcon, Face as FaceIcon, AlternateEmail as UserNameIcon, CalendarMonth as CalendarIcon } from '@mui/icons-material'
+
+import { transformImage } from '../../lib/features';
 import { setIsProfile } from '../../redux/reducers/misc';
 import { profileColor } from '../constants/color';
 import { useAsyncMutation } from '../../hooks/hooks';
@@ -51,11 +53,11 @@ const Profile = ({ user, dispatch, profileAnchor }) => {
             style = {{ zIndex: 2 }}
         >
             <div style = {{ backgroundColor: profileColor, borderRadius: 9, padding: 0, marginTop: -8, marginBottom: -8 }}>
-                <Stack spacing={"0.5rem"} direction={"column"}>
+                <Stack spacing = {"0.5rem"} direction = {"column"}>
                     <Stack direction = "row" spacing = {"1rem"} style = {{ padding: 10 }}>
                         <Avatar 
                             src = {transformImage(user?.avatar?.url)}
-                            sx={{
+                            sx = {{
                                 width: 100,
                                 height: 100,
                                 objectFit: "contain",
@@ -64,25 +66,25 @@ const Profile = ({ user, dispatch, profileAnchor }) => {
                             }}
                         />
                         <Stack direction = "column" spacing = {"1rem"} style = {{ padding: 10 }}>
-                            <ProfileCard text={user?.name} icon={<FaceIcon/>}/>
-                            <ProfileCard text={user?.username} icon={<UserNameIcon/>}/>
+                            <ProfileCard text = {user?.name} icon = {<FaceIcon/>}/>
+                            <ProfileCard text = {user?.username} icon = {<UserNameIcon/>}/>
                         </Stack>
                     </Stack>
                     <Stack spacing = {"1rem"} style = {{ padding: 10 }}>
                         <Stack direction = {"row"}>
                             {isEdit ? (
                             <>
-                                <TextField variant = "standard" value = {aboutUpdateValue} onChange={(e) => setAboutUpdateValue(e.target.value)}/>
-                                <IconButton onClick={updateAbout} disabled={isLoadingChangeAbout}><DoneIcon/></IconButton>
+                                <TextField variant = "standard" value = {aboutUpdateValue} onChange = {(e) => setAboutUpdateValue(e.target.value)}/>
+                                <IconButton onClick = {updateAbout} disabled = {isLoadingChangeAbout}><DoneIcon/></IconButton>
                             </>
                             ) : (
                                 <>  
                                     <ProfileCard heading={"About"} text = {about}/>
-                                    <IconButton onClick = {() => {setIsEdit(true)}} disabled={isLoadingChangeAbout}><EditIcon/></IconButton>
+                                    <IconButton onClick = {() => {setIsEdit(true)}} disabled = {isLoadingChangeAbout}><EditIcon/></IconButton>
                                 </>
                             )}
                         </Stack>
-                        <ProfileCard text={moment(user?.createdAt).fromNow()} icon={<CalendarIcon/>}/>
+                        <ProfileCard text = {moment(user?.createdAt).fromNow()} icon = {<CalendarIcon/>}/>
                     </Stack>
                 </Stack>
             </div>
@@ -92,16 +94,16 @@ const Profile = ({ user, dispatch, profileAnchor }) => {
 
 const ProfileCard = ({text, icon, heading}) => (
     <Stack
-        direction={"row"}
-        alignItems={"center"}
-        spacing={"0.5rem"}
-        color={"black"}
-        textAlign={"center"}
+        direction = {"row"}
+        alignItems = {"center"}
+        spacing = {"0.5rem"}
+        color = {"black"}
+        textAlign = {"center"}
     >
         {icon && icon}
         <Stack style = {{ textAlign: "left" }}>
-            <Typography color = "black" variant='h6'>{heading}</Typography>
-            <Typography variant='body1'>{text}</Typography>
+            <Typography color = "black" variant = 'h6'>{heading}</Typography>
+            <Typography variant = 'body1'>{text}</Typography>
         </Stack>
     </Stack>
 );

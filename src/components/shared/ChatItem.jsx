@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
-import { Link } from '../styles/StyledComponents';
 import { Box, Stack, Typography } from '@mui/material';
+import { Link } from '../styles/StyledComponents';
 import AvatarCard from './AvatarCard';
 import { hoverChatColor } from '../constants/color';
 

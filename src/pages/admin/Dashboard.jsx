@@ -1,5 +1,7 @@
 import React from 'react'
-import AdminLayout from '../../components/layout/AdminLayout'
+import moment from 'moment'
+import { useFetchData } from '6pp'
+
 import { Box, Container, Paper, Skeleton, Stack, Typography } from '@mui/material'
 import { AdminPanelSettings as AdminPanelSettingsIcon, 
     Group as GroupIcon , 
@@ -7,13 +9,12 @@ import { AdminPanelSettings as AdminPanelSettingsIcon,
     Notifications as NotificationsIcon, 
     Person as PersonIcon
 } from '@mui/icons-material'
-import moment from 'moment'
-import { SearchField, CurveButton } from '../../components/styles/StyledComponents'
-import { DoughnutChart, LineChart } from '../../components/specefic/Chart'
-import { useFetchData } from '6pp'
-import { server } from '../../components/constants/config'
-import { LayoutLoader } from '../../components/layout/Loaders'
+
 import { useErrors } from '../../hooks/hooks'
+import { server } from '../../components/constants/config'
+import AdminLayout from '../../components/layout/AdminLayout'
+import { DoughnutChart, LineChart } from '../../components/specefic/Chart'
+import { SearchField, CurveButton } from '../../components/styles/StyledComponents'
 
 const Dashboard = () => {
     const { loading, data, error } = useFetchData(`${server}/api/v1/admin/stats`, "dashboard-stats")

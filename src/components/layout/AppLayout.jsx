@@ -1,25 +1,28 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'react-responsive';
-import Header from './Header';
-import Title from '../shared/Title';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
+
 import { Button, Drawer, Grid, Skeleton, Stack, Typography } from '@mui/material';
+
+import Header from './Header';
+import Room from '../../pages/Room';
+import Title from '../shared/Title';
+import peer from '../../service/peer'
+import Movie from '../../pages/Movie';
 import ChatList from '../specefic/ChatList'
 import Profile from '../specefic/Profile'
-import { useNavigate, useParams } from 'react-router-dom';
-import { useMyChatsQuery } from '../../redux/api/api';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCalling, setDisplayDialog, setIsDeleteMenu, setIsMobile, setIsProfile, setIsVideo, setSelectedDeleteChat, setShowMovie, setShowVideo } from '../../redux/reducers/misc';
-import { useErrors, useSocketEvents } from '../../hooks/hooks';
-import { getSocket } from '../../socket';
-import { ALERT, NEW_MESSAGE_ALERT, NEW_REQUEST, ONLINE_USERS, REFETCH_CHATS } from '../constants/events';
-import { incrementNotification, setNewMessagesAlert } from '../../redux/reducers/chat';
-import { getOrSaveFromStorage } from '../../lib/features';
 import DeleteChatMenu from '../dialogues/DeleteChatMenu';
-import Room from '../../pages/Room';
-import Movie from '../../pages/Movie';
-import peer from '../../service/peer'
+
+import { getSocket } from '../../socket';
+import { useMyChatsQuery } from '../../redux/api/api';
 import { callBackgroundColor } from '../constants/color';
-import toast from 'react-hot-toast';
+import { getOrSaveFromStorage } from '../../lib/features';
+import { useErrors, useSocketEvents } from '../../hooks/hooks';
+import { incrementNotification, setNewMessagesAlert } from '../../redux/reducers/chat';
+import { setCalling, setDisplayDialog, setIsDeleteMenu, setIsMobile, setIsProfile, setIsVideo, setSelectedDeleteChat, setShowMovie, setShowVideo } from '../../redux/reducers/misc';
+import { ALERT, CALL_ENDED_BEFORE_RECIEVING, CALL_REQUEST, MOVIE_REQUEST_ACCEPTED, MOVIE_REQUEST_DECLINED, NEW_MESSAGE_ALERT, NEW_REQUEST, ONLINE_USERS, REFETCH_CHATS, REQUEST_TO_WATCH_MOVIE } from '../constants/events';
 
 const AppLayout = () => (WrappedComponent) => {
     return (props) => {
@@ -84,15 +87,6 @@ const AppLayout = () => (WrappedComponent) => {
         const sendAlert = useCallback((data) => {
             toast.success(data); 
         })
-
-        const eventHandlers = { 
-            [ALERT]: sendAlert,
-            [REFETCH_CHATS]: refetchListener,
-            [NEW_MESSAGE_ALERT]: newMessagesAlertHandler,
-            [NEW_REQUEST]: newRequestHandler,
-            [ONLINE_USERS]: onlineUsersListener,
-        };
-        useSocketEvents(socket, eventHandlers);
 
         const openProfile = (e) => {
             e.preventDefault();
@@ -163,20 +157,20 @@ const AppLayout = () => (WrappedComponent) => {
             toast.error("Oops, your request has been declined");
         })
 
-        useEffect(() => {
-            socket.on('call-request', handleCallRequest);
-            socket.on('call-ended-before-recieving', alreadyEndedCallHandler);
-            socket.on('request-to-watch-movie', handleMovieRequest);
-            socket.on('movieRequest-declined', handleDeclineRequest);
-            socket.on('movieRequest-accepted', handleAcceptRequest);
-            return () => {
-                socket.off('call-request', handleCallRequest);
-                socket.off('call-ended-before-recieving', alreadyEndedCallHandler);
-                socket.off('request-to-watch-movie', handleMovieRequest);
-                socket.off('movieRequest-declined', handleDeclineRequest);
-                socket.off('movieRequest-accepted', handleAcceptRequest);
-            }
-        }, [socket, handleCallRequest, alreadyEndedCallHandler, handleMovieRequest, handleDeclineRequest, handleAcceptRequest]);
+        const eventHandlers = { 
+            [ALERT]: sendAlert,
+            [REFETCH_CHATS]: refetchListener,
+            [NEW_MESSAGE_ALERT]: newMessagesAlertHandler,
+            [NEW_REQUEST]: newRequestHandler,
+            [ONLINE_USERS]: onlineUsersListener,
+            [CALL_REQUEST]: handleCallRequest,
+            [CALL_ENDED_BEFORE_RECIEVING]: alreadyEndedCallHandler,
+            [REQUEST_TO_WATCH_MOVIE]: handleMovieRequest,
+            [MOVIE_REQUEST_ACCEPTED]: handleAcceptRequest,
+            [MOVIE_REQUEST_DECLINED]: handleDeclineRequest,
+        };
+        useSocketEvents(socket, eventHandlers);
+    
 
         return (
             <>  
